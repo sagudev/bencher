@@ -225,7 +225,7 @@ impl GitHubActions {
 
         // Update or create the comment
         let issue_handler = github_client.issues(owner, repo);
-        let body = report_comment.html(self.ci_only_thresholds, self.ci_id.as_deref());
+        let body = report_comment.html(self.ci_only_thresholds, self.ci_id.as_deref(), false);
         // Always update the comment if it exists
         let comment = if let Some(comment_id) = comment_id {
             issue_handler.update_comment(comment_id, body).await
@@ -263,9 +263,12 @@ impl GitHubActions {
         let full_name = repository_full_name(event_str, event)?;
         let (owner, repo) = split_full_name(full_name)?;
 
+        let mut title = String::new();
+        report_comment.html_header(&mut title);
+
         let report = CheckRunOutput {
-            title: "Bencher Report".to_owned(),
-            summary: report_comment.html(self.ci_only_thresholds, self.ci_id.as_deref()),
+            title,
+            summary: report_comment.html(self.ci_only_thresholds, self.ci_id.as_deref(), true),
             text: None,
             annotations: Vec::new(),
             images: Vec::new(),
