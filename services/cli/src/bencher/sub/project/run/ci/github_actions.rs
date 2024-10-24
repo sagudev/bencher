@@ -264,8 +264,8 @@ impl GitHubActions {
         let (owner, repo) = split_full_name(full_name)?;
 
         let report = CheckRunOutput {
-            title: "🐰 Bencher Report".to_owned(),
-            summary: report_comment.html(self.ci_only_thresholds, self.ci_id.as_deref(), true),
+            title: String::new(),
+            summary: report_comment.html(self.ci_only_thresholds, self.ci_id.as_deref(), false),
             text: None,
             annotations: Vec::new(),
             images: Vec::new(),
